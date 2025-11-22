@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piano Learning App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <header>
+            <h1>Piano Studio</h1>
+            <div class="controls">
+                <div class="control-group">
+                    <label for="midi-input">MIDI Input</label>
+                    <div style="display: flex; gap: 5px;">
+                        <select id="midi-input">
+                            <option value="">Loading...</option>
+                        </select>
+                        <button id="refresh-midi-btn" class="btn-secondary small-btn"
+                            title="Refresh MIDI Devices">↻</button>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="bpm">BPM</label>
+                    <input type="number" id="bpm" value="120" min="40" max="240">
+                </div>
+                <div class="control-group">
+                    <label>Metronome</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="metronome-toggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="control-group volume-controls">
+                    <div class="volume-slider">
+                        <label for="piano-vol">Piano Vol</label>
+                        <input type="range" id="piano-vol" min="0" max="100" value="50">
+                    </div>
+                    <div class="volume-slider">
+                        <label for="metro-vol">Metro Vol</label>
+                        <input type="range" id="metro-vol" min="0" max="100" value="50">
+                    </div>
+                </div>
+
+                <button id="settings-btn" class="btn-secondary" title="Settings">⚙️</button>
+            </div>
+        </header>
+
+        <main>
+            <section class="chord-creation">
+                <h2>Chord Builder</h2>
+                <div class="chord-options">
+                    <div class="option-group">
+                        <label for="chord-quality">Quality</label>
+                        <select id="chord-quality">
+                            <option value="major">Major</option>
+                            <option value="minor">Minor</option>
+                            <option value="7">Dominant 7</option>
+                            <option value="maj7">Major 7</option>
+                            <option value="m7">Minor 7</option>
+                        </select>
+                    </div>
+                    <div class="option-group">
+                        <label>Duration</label>
+                        <div class="duration-selector">
+                            <label class="radio-label">
+                                <input type="radio" name="duration" value="4" checked> 1 Bar
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="duration" value="2"> 1/2 Bar
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="duration" value="1"> 1/4 Bar
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="chord-buttons">
+                    <div class="row">
+                        <button class="chord-btn" data-root="C">C</button>
+                        <button class="chord-btn" data-root="D">D</button>
+                        <button class="chord-btn" data-root="E">E</button>
+                        <button class="chord-btn" data-root="F">F</button>
+                        <button class="chord-btn" data-root="G">G</button>
+                        <button class="chord-btn" data-root="A">A</button>
+                        <button class="chord-btn" data-root="B">B</button>
+                        <button class="chord-btn" id="rest-btn" data-root="Rest">Rest</button>
+                    </div>
+                    <div class="row">
+                        <button class="chord-btn black-key-btn" data-root="C#">C#</button>
+                        <button class="chord-btn black-key-btn" data-root="D#">D#</button>
+                        <button class="chord-btn black-key-btn" data-root="F#">F#</button>
+                        <button class="chord-btn black-key-btn" data-root="G#">G#</button>
+                        <button class="chord-btn black-key-btn" data-root="A#">A#</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="timeline-display">
+                <div class="section-header">
+                    <h2>Chord Chart</h2>
+                    <div class="controls">
+                        <button id="play-btn" class="btn-primary">Play</button>
+                        <button id="stop-btn" class="btn-secondary">Stop</button>
+                        <button id="reset-btn" class="btn-secondary">Reset</button>
+                        <button id="clear-btn" class="btn-danger">Clear</button>
+                        <label class="toggle-label">
+                            <input type="checkbox" id="loop-toggle">
+                            <span>Loop</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="control-group playback-controls" style="width: 100%; max-width: none; margin-bottom: 10px;">
+                    <div class="playback-bar-container">
+                        <input type="range" id="playback-bar" min="0" max="0" value="0" step="1">
+                        <div class="range-inputs">
+                            <label>Range: <input type="number" id="range-start" min="1" value="1"
+                                    class="small-input"></label>
+                            <span>-</span>
+                            <label><input type="number" id="range-end" min="1" value="1" class="small-input"></label>
+                        </div>
+                    </div>
+                </div>
+                <div id="chord-timeline" class="timeline">
+                    <div class="empty-state">No chords added yet. Press a button above to start.</div>
+                </div>
+            </section>
+
+            <section class="piano-display">
+                <div class="section-header">
+                    <h2>Piano</h2>
+                    <label class="toggle-label">
+                        <input type="checkbox" id="key-labels-toggle">
+                        <span>Show Notes</span>
+                    </label>
+                </div>
+                <div id="piano" class="piano">
+                    <!-- Keys generated by JS -->
+                </div>
+            </section>
+
+
+        </main>
+    </div>
+    <div id="context-menu" class="context-menu">
+        <div class="menu-item has-submenu">
+            Chord Type
+            <div class="submenu">
+                <div class="menu-item" data-action="type" data-value="major">Major</div>
+                <div class="menu-item" data-action="type" data-value="minor">Minor</div>
+                <div class="menu-item" data-action="type" data-value="7">Dominant 7</div>
+                <div class="menu-item" data-action="type" data-value="maj7">Major 7</div>
+                <div class="menu-item" data-action="type" data-value="m7">Minor 7</div>
+            </div>
+        </div>
+        <div class="menu-item has-submenu">
+            Duration
+            <div class="submenu">
+                <div class="menu-item" data-action="duration" data-value="4">1 Bar</div>
+                <div class="menu-item" data-action="duration" data-value="2">1/2 Bar</div>
+                <div class="menu-item" data-action="duration" data-value="1">1/4 Bar</div>
+            </div>
+        </div>
+        <div class="menu-item has-submenu">
+            Inversion
+            <div class="submenu">
+                <div class="menu-item" data-action="inversion" data-value="0">Root</div>
+                <div class="menu-item" data-action="inversion" data-value="1">1st Inv</div>
+                <div class="menu-item" data-action="inversion" data-value="2">2nd Inv</div>
+            </div>
+        </div>
+        <div class="menu-separator"></div>
+        <div class="menu-item" data-action="copy">Copy<span class="shortcut" id="shortcut-copy">Ctrl+C</span></div>
+        <div class="menu-item" data-action="cut">Cut<span class="shortcut" id="shortcut-cut">Ctrl+X</span></div>
+        <div class="menu-item" data-action="paste">Paste<span class="shortcut" id="shortcut-paste">Ctrl+V</span></div>
+        <div class="menu-item delete" data-action="delete">Delete<span class="shortcut" id="shortcut-delete">Del</span>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Settings</h2>
+                <button class="close-btn" id="close-settings">×</button>
+            </div>
+            <div class="modal-body">
+                <h3>Keyboard Shortcuts</h3>
+                <div class="shortcut-settings">
+                    <div class="shortcut-row">
+                        <label>Copy:</label>
+                        <input type="text" id="setting-copy" class="shortcut-input" readonly>
+                        <button class="btn-secondary" data-action="copy">Change</button>
+                    </div>
+                    <div class="shortcut-row">
+                        <label>Cut:</label>
+                        <input type="text" id="setting-cut" class="shortcut-input" readonly>
+                        <button class="btn-secondary" data-action="cut">Change</button>
+                    </div>
+                    <div class="shortcut-row">
+                        <label>Paste:</label>
+                        <input type="text" id="setting-paste" class="shortcut-input" readonly>
+                        <button class="btn-secondary" data-action="paste">Change</button>
+                    </div>
+                    <div class="shortcut-row">
+                        <label>Delete:</label>
+                        <input type="text" id="setting-delete" class="shortcut-input" readonly>
+                        <button class="btn-secondary" data-action="delete">Change</button>
+                    </div>
+                    <div class="shortcut-row">
+                        <label>Undo:</label>
+                        <input type="text" id="setting-undo" class="shortcut-input" readonly>
+                        <button class="btn-secondary" data-action="undo">Change</button>
+                    </div>
+                    <div class="shortcut-row">
+                        <label>Redo:</label>
+                        <input type="text" id="setting-redo" class="shortcut-input" readonly>
+                        <button class="btn-secondary" data-action="redo">Change</button>
+                    </div>
+                    <div class="shortcut-row">
+                        <label>Play/Pause:</label>
+                        <input type="text" id="setting-play" class="shortcut-input" readonly>
+                        <button class="btn-secondary" data-action="play">Change</button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-secondary" id="reset-shortcuts">Reset to Defaults</button>
+                    <button class="btn-primary" id="save-settings">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="notification-toast" class="notification-toast">Action Undone</div>
+    <script src="app.js" defer></script>
+</body>
+
+</html>
